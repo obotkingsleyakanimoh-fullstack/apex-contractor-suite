@@ -33,7 +33,7 @@ function ContactPage() {
   const address =
     office?.address ??
     [company?.address, company?.city, company?.state].filter(Boolean).join(", ");
-  const embed = mapEmbedUrl(office);
+  const embed = office ? mapEmbedUrl(office) : null;
 
   return (
     <SiteLayout>
@@ -145,7 +145,7 @@ function ContactPage() {
               </div>
             ) : null}
 
-            <DistanceChecker />
+            {office ? <DistanceChecker office={office} /> : null}
           </aside>
         </div>
       </section>

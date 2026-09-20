@@ -121,7 +121,7 @@ function LocationsPage() {
               </div>
             ) : null}
 
-            <DistanceChecker />
+            {office ? <DistanceChecker office={office} /> : null}
           </aside>
         </div>
       </section>
