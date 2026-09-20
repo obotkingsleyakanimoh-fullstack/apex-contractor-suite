@@ -9,9 +9,8 @@ import { Breadcrumbs } from "@/components/site/shared";
 import { telHref } from "@/lib/format";
 
 export const Route = createFileRoute("/request-quote")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    service: typeof search.service === "string" ? search.service : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { service?: string } =>
+    typeof search.service === "string" ? { service: search.service } : {},
   head: () => ({
     meta: [
       { title: "Request a Quote — Tell Us About Your Project" },
