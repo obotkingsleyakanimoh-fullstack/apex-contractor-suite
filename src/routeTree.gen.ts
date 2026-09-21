@@ -21,7 +21,9 @@ import { Route as RequestQuoteRouteImport } from './routes/request-quote'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminFaqsRouteImport } from './routes/admin.faqs'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
@@ -89,9 +91,19 @@ const AdminFaqsRoute = AdminFaqsRouteImport.update({
   path: '/faqs',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProjectsRoute = AdminProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQuotesRoute = AdminQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
@@ -137,7 +149,9 @@ export interface FileRoutesByFullPath {
   '/request-quote': typeof RequestQuoteRoute
   '/terms': typeof TermsRoute
   '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/projects': typeof AdminProjectsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -157,7 +171,9 @@ export interface FileRoutesByTo {
   '/request-quote': typeof RequestQuoteRoute
   '/terms': typeof TermsRoute
   '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/projects': typeof AdminProjectsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -179,7 +195,9 @@ export interface FileRoutesById {
   '/request-quote': typeof RequestQuoteRoute
   '/terms': typeof TermsRoute
   '/admin/faqs': typeof AdminFaqsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/projects': typeof AdminProjectsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -202,7 +220,9 @@ export interface FileRouteTypes {
     | '/request-quote'
     | '/terms'
     | '/admin/faqs'
+    | '/admin/messages'
     | '/admin/projects'
+    | '/admin/quotes'
     | '/admin/services'
     | '/admin/testimonials'
     | '/projects/$slug'
@@ -222,7 +242,9 @@ export interface FileRouteTypes {
     | '/request-quote'
     | '/terms'
     | '/admin/faqs'
+    | '/admin/messages'
     | '/admin/projects'
+    | '/admin/quotes'
     | '/admin/services'
     | '/admin/testimonials'
     | '/projects/$slug'
@@ -243,7 +265,9 @@ export interface FileRouteTypes {
     | '/request-quote'
     | '/terms'
     | '/admin/faqs'
+    | '/admin/messages'
     | '/admin/projects'
+    | '/admin/quotes'
     | '/admin/services'
     | '/admin/testimonials'
     | '/projects/$slug'
@@ -356,11 +380,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFaqsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/projects': {
       id: '/admin/projects'
       path: '/projects'
       fullPath: '/admin/projects'
       preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/quotes': {
+      id: '/admin/quotes'
+      path: '/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AdminQuotesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/services': {
@@ -410,7 +448,9 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminFaqsRoute: typeof AdminFaqsRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
+  AdminQuotesRoute: typeof AdminQuotesRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -418,7 +458,9 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminFaqsRoute: AdminFaqsRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
   AdminProjectsRoute: AdminProjectsRoute,
+  AdminQuotesRoute: AdminQuotesRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
