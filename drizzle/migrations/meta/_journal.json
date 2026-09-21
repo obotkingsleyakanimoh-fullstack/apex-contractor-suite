@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789726202019,
+      "tag": "0000_create_service_business_platform",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789960272372,
+      "tag": "0001_zitso_energy_completion",
+      "breakpoints": true
+    }
+  ]
+}
