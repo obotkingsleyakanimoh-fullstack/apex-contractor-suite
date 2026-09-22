@@ -3,6 +3,9 @@ import { Check, Eye, Palette, RotateCcw, Save, Type } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { PageHeroCarousel } from "@/components/site/PageHeroCarousel";
+import { useSiteContent } from "@/hooks/useSiteContent";
+import type { HeroContent } from "@/types/db";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -175,6 +178,8 @@ function WeightSelect({ label, value, onChange }: { label: string; value: number
 
 export function WebsiteAppearance() {
   const { settings, setSettings } = useAppearance();
+  const { get } = useSiteContent();
+  const currentHero = get<HeroContent>("request_quote_hero", {});
   const [draft, setDraft] = useState<WebsiteSettings>(settings);
   const [saving, setSaving] = useState(false);
   const [activePreset, setActivePreset] = useState("Zitso Default");
@@ -211,6 +216,7 @@ export function WebsiteAppearance() {
     "--preview-heading-font": `"${draft.heading_font}", ui-sans-serif, system-ui, sans-serif`,
     "--preview-body-size": `${draft.body_font_size}px`,
     "--preview-h1-size": `${Math.min(draft.h1_font_size, 64)}px`,
+    "--preview-h2-size": `${Math.min(draft.h2_font_size, 44)}px`,
     "--preview-button-size": `${draft.button_font_size}px`,
   } as CSSProperties), [draft]);
 
@@ -407,38 +413,76 @@ export function WebsiteAppearance() {
           </div>
           <p className="mt-1 text-sm text-muted-foreground">This preview updates immediately while you edit. It does not publish anything until Save Changes.</p>
 
-          <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-border shadow-card" style={previewStyle}>
-            <div style={{ background: "var(--preview-navbar)", color: "var(--preview-heading)", fontFamily: "var(--preview-body-font)", fontSize: "var(--preview-body-size)" }} className="flex items-center justify-between gap-4 border-b px-5 py-4">
-              <strong style={{ fontFamily: "var(--preview-heading-font)" }}>Zitso Energy</strong>
-              <div className="hidden gap-5 text-xs font-semibold sm:flex">
-                <span>Home</span><span>Services</span><span>Projects</span><span>About</span><span>Contact</span>
+          <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-border bg-[var(--preview-bg)] shadow-card" style={previewStyle}>
+            <div className="border-b border-[var(--preview-border)] bg-[var(--preview-navbar)] px-4 py-3 sm:px-5">
+              <div className="flex items-center justify-between gap-4">
+                <div className="font-bold" style={{ color: "var(--preview-heading)", fontFamily: "var(--preview-heading-font)" }}>Zitso Energy</div>
+                <div className="hidden items-center gap-4 text-xs font-semibold md:flex" style={{ color: "var(--preview-heading)", fontFamily: "var(--preview-body-font)" }}>
+                  <span>Home</span><span>Services</span><span>Projects</span><span>About</span><span>Contact</span>
+                </div>
+                <span className="rounded-full px-3 py-2 text-xs font-bold text-white" style={{ background: "var(--preview-primary)", fontFamily: "var(--preview-body-font)", fontSize: "var(--preview-button-size)" }}>Request a quote</span>
               </div>
-              <span className="rounded-full px-4 py-2 text-xs font-bold text-white" style={{ background: "var(--preview-primary)", fontSize: "var(--preview-button-size)" }}>Request a quote</span>
             </div>
 
-            <div className="grid gap-6 p-6 sm:p-8 md:grid-cols-[1.2fr_.8fr]" style={{ background: "linear-gradient(120deg, var(--preview-footer), var(--preview-primary))", color: "white", fontFamily: "var(--preview-body-font)" }}>
-              <div className="self-center">
-                <span className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: "var(--preview-accent)" }}>Solar energy</span>
-                <h4 className="mt-3 text-3xl font-bold sm:text-4xl" style={{ fontFamily: "var(--preview-heading-font)", color: "white", fontSize: "var(--preview-h1-size)" }}>Power your home with dependable solar.</h4>
-                <p className="mt-3 max-w-xl text-sm leading-6" style={{ color: "rgba(255,255,255,.78)" }}>A realistic preview of the visual system, including type, buttons, cards and form controls.</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <span className="rounded-full px-4 py-2 text-sm font-semibold" style={{ background: "var(--preview-accent)", color: "var(--preview-heading)", fontSize: "var(--preview-button-size)" }}>Primary action</span>
-                  <span className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold">Secondary</span>
+            <div className="relative" style={{
+              "--hero-overlay": draft.hero_overlay_color,
+              "--color-accent": draft.accent_color,
+              "--heading-color": draft.heading_color,
+            } as CSSProperties}>
+              <PageHeroCarousel
+                hero={currentHero}
+                fallbackSlides={[
+                  { image_url: "/images/solar-installation.webp", eyebrow: "Solar energy • Zitso Energy", headline: "Power your home with energy you can depend on.", subheadline: "We design practical solar power systems around the way you use electricity." },
+                  { image_url: "/images/inverter-installation.webp", eyebrow: "Hybrid power • Battery storage", headline: "Keep essential power running when the grid cannot.", subheadline: "Hybrid inverter and battery systems designed around the loads that matter most." },
+                  { image_url: "/images/commercial-project.webp", eyebrow: "Residential • Commercial • Industrial", headline: "A complete solar solution from assessment to after-sales care.", subheadline: "Assessment, sizing, installation and maintenance for dependable energy." },
+                ]}
+                primaryHref="/request-quote"
+                secondaryHref="/services"
+                primaryLabel="Get a solar assessment"
+                secondaryLabel="Explore solar solutions"
+                minHeight="min-h-[390px] sm:min-h-[470px] lg:min-h-[540px]"
+              />
+            </div>
+
+            <div className="border-y border-[var(--preview-border)] bg-[var(--preview-bg)] px-4 py-5 sm:px-6">
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  ["Engineered for reliability", "Proper sizing, quality components and careful installation."],
+                  ["Built around your usage", "Designed around your appliances, operating hours and backup priorities."],
+                  ["Solar + storage", "Generation, batteries and hybrid inverters working as one system."],
+                ].map(([title, body]) => (
+                  <div key={title} className="rounded-xl border p-4" style={{ background: "var(--preview-surface)", borderColor: "var(--preview-border)", color: "var(--preview-text)", fontFamily: "var(--preview-body-font)" }}>
+                    <h4 className="font-bold" style={{ color: "var(--preview-heading)", fontFamily: "var(--preview-heading-font)" }}>{title}</h4>
+                    <p className="mt-1 text-xs leading-5" style={{ color: "var(--preview-muted)" }}>{body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-5 bg-[var(--preview-bg)] p-5 sm:p-6 md:grid-cols-[1fr_.75fr]">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: "var(--preview-primary)", fontFamily: "var(--preview-body-font)" }}>Solar solutions</p>
+                <h3 className="mt-2 font-bold" style={{ color: "var(--preview-heading)", fontFamily: "var(--preview-heading-font)", fontSize: "var(--preview-h2-size)" }}>A complete energy system, not just solar panels.</h3>
+                <p className="mt-2 text-sm leading-6" style={{ color: "var(--preview-text)", fontFamily: "var(--preview-body-font)" }}>The preview now follows the current Zitso Energy public design instead of the previous generic mockup.</p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {["Solar PV systems", "Hybrid inverter systems", "Battery energy storage", "Solar maintenance"].map((item) => (
+                    <div key={item} className="rounded-xl border p-3 text-sm font-semibold" style={{ background: "var(--preview-surface)", borderColor: "var(--preview-border)", color: "var(--preview-heading)" }}>{item}</div>
+                  ))}
                 </div>
               </div>
-              <div className="rounded-2xl p-5" style={{ background: "var(--preview-surface)", color: "var(--preview-text)" }}>
-                <h5 className="font-bold" style={{ fontFamily: "var(--preview-heading-font)", color: "var(--preview-heading)" }}>Solar assessment</h5>
+              <div className="rounded-2xl border p-5" style={{ background: "var(--preview-surface)", borderColor: "var(--preview-border)", color: "var(--preview-text)" }}>
+                <h4 className="font-bold" style={{ color: "var(--preview-heading)", fontFamily: "var(--preview-heading-font)" }}>Request a solar assessment</h4>
                 <p className="mt-1 text-sm" style={{ color: "var(--preview-muted)" }}>Tell us what you want to power.</p>
                 <div className="mt-4 space-y-3">
-                  <div className="rounded-lg border bg-transparent px-3 py-2 text-sm" style={{ borderColor: "var(--preview-border)", color: "var(--preview-muted)" }}>Your name</div>
-                  <div className="rounded-lg border bg-transparent px-3 py-2 text-sm" style={{ borderColor: "var(--preview-border)", color: "var(--preview-muted)" }}>Email address</div>
+                  <div className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: "var(--preview-border)", color: "var(--preview-muted)" }}>Your name</div>
+                  <div className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: "var(--preview-border)", color: "var(--preview-muted)" }}>Email address</div>
                   <span className="inline-flex rounded-full px-4 py-2 text-xs font-bold text-white" style={{ background: "var(--preview-primary)" }}>Send enquiry</span>
                 </div>
               </div>
             </div>
 
-            <div className="px-5 py-4 text-xs" style={{ background: "var(--preview-footer)", color: "rgba(255,255,255,.72)", fontFamily: "var(--preview-body-font)" }}>
-              Footer preview • Zitso Energy • Solar PV • Inverter • Battery storage
+            <div className="px-5 py-5 text-xs" style={{ background: "var(--preview-footer)", color: "rgba(255,255,255,.72)", fontFamily: "var(--preview-body-font)" }}>
+              Zitso Energy • Solar PV • Hybrid Inverters • Battery Storage • Maintenance
             </div>
           </div>
 

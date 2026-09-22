@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import type { CompanySettings, OfficeLocation, BusinessHour, HeroContent, HeroSlide, PageContent } from "@/types/db";
 import { logActivity } from "@/lib/activity";
+import { PageHeroCarousel } from "@/components/site/PageHeroCarousel";
 
 export const Route = createFileRoute("/admin/content")({ component: AdminContent });
 const dayOrder = [1, 2, 3, 4, 5, 6, 0];
@@ -31,6 +32,30 @@ function HeroEditor({ title, description, value, onChange }: HeroEditorProps) {
       <Field label="Primary button URL"><Input value={value.primary_cta_url ?? ""} onChange={(e) => onChange({ ...value, primary_cta_url: e.target.value })} /></Field>
       <Field label="Secondary button"><Input value={value.secondary_cta ?? ""} onChange={(e) => onChange({ ...value, secondary_cta: e.target.value })} /></Field>
       <Field label="Secondary button URL"><Input value={value.secondary_cta_url ?? ""} onChange={(e) => onChange({ ...value, secondary_cta_url: e.target.value })} /></Field>
+    </div>
+    <div className="mt-7 rounded-2xl border border-border bg-background p-3 sm:p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <h3 className="font-display text-base font-semibold">Current live hero preview</h3>
+          <p className="text-xs text-muted-foreground">This uses the same wide cinematic hero component, image treatment, fade/zoom transition and responsive layout used by the current public site.</p>
+        </div>
+        <span className="hidden rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold text-muted-foreground sm:inline-flex">Live design</span>
+      </div>
+      <div className="overflow-hidden rounded-xl border border-border">
+        <PageHeroCarousel
+          hero={value}
+          fallbackSlides={[
+            { image_url: "/images/solar-installation.webp", eyebrow: "Solar energy • Zitso Energy", headline: "Power your home with energy you can depend on.", subheadline: "We design practical solar power systems around the way you use electricity." },
+            { image_url: "/images/inverter-installation.webp", eyebrow: "Hybrid power • Battery storage", headline: "Keep essential power running when the grid cannot.", subheadline: "Hybrid inverter and battery systems designed around the loads that matter most." },
+            { image_url: "/images/commercial-project.webp", eyebrow: "Residential • Commercial • Industrial", headline: "A complete solar solution from assessment to after-sales care.", subheadline: "Assessment, sizing, installation and maintenance for dependable energy." },
+          ]}
+          primaryHref="/request-quote"
+          secondaryHref="/services"
+          primaryLabel="Get a solar assessment"
+          secondaryLabel="Explore solar solutions"
+          minHeight="min-h-[430px] sm:min-h-[500px] lg:min-h-[560px]"
+        />
+      </div>
     </div>
     <div className="mt-7 space-y-4">
       <div className="flex items-center justify-between"><div><h3 className="font-display text-base font-semibold">Carousel slides</h3><p className="text-sm text-muted-foreground">Each slide uses an image chosen from your computer and uploaded to the Supabase media bucket.</p></div><Button type="button" variant="outline" onClick={() => onChange({ ...value, slides: [...slides, { image_url: "", eyebrow: "Solar energy", headline: "Power your home with energy you can depend on.", subheadline: "Tell us what you need to power and we will design the right solar system around your needs." }] })}>Add slide</Button></div>
