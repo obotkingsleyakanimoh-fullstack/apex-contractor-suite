@@ -21,7 +21,7 @@ export function PageHeroCarousel({
   secondaryHref = "/services",
   primaryLabel = "Get a solar assessment",
   secondaryLabel = "Explore solar solutions",
-  minHeight = "min-h-[720px] sm:min-h-[780px] lg:min-h-[820px]",
+  minHeight = "min-h-[620px] sm:min-h-[720px] lg:min-h-[820px]",
 }: Props) {
   const slides = useMemo(() => {
     const configured = Array.isArray(hero.slides) ? hero.slides.filter((s) => s?.image_url) : [];
@@ -66,7 +66,7 @@ export function PageHeroCarousel({
           className={`absolute inset-0 transition-all duration-[1400ms] ease-out ${index === active ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-[1.035]"}`}
           aria-hidden={index !== active}
         >
-          <img src={item.image_url} alt="" className="h-full w-full object-cover" />
+          <img src={item.image_url} alt="" className="h-full w-full object-cover object-[center_35%] sm:object-center" />
           <div
             className="absolute inset-0"
             style={{
@@ -82,27 +82,27 @@ export function PageHeroCarousel({
         </div>
       ))}
 
-      <div className={`container-page relative flex ${minHeight} items-end py-20 sm:py-24 lg:items-center`}>
-        <div key={active} className="max-w-5xl animate-in fade-in slide-in-from-bottom-5 duration-700">
+      <div className={`container-page relative flex ${minHeight} items-end py-14 sm:py-20 sm:py-24 lg:items-center`}>
+        <div key={active} className="w-full max-w-5xl animate-in fade-in slide-in-from-bottom-5 duration-700">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-sm">
             {slide.eyebrow || hero.eyebrow || "Solar energy • Zitso Energy"}
           </p>
-          <h1 className="mt-5 max-w-5xl font-display text-5xl font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-[6.2rem]">
+          <h1 className="mt-4 max-w-5xl break-words font-display text-[2.7rem] font-bold leading-[0.98] tracking-[-0.04em] sm:mt-5 sm:text-6xl lg:text-[6.2rem]">
             {slide.headline || hero.headline || "Power your home with energy you can depend on."}
           </h1>
-          <p className="mt-7 max-w-2xl text-base leading-7 text-white/80 sm:text-xl sm:leading-8">
+          <p className="mt-5 max-w-2xl text-[0.98rem] leading-6 text-white/80 sm:mt-7 sm:text-xl sm:leading-8">
             {slide.subheadline || hero.subheadline}
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="h-13 rounded-full bg-[var(--color-accent)] px-7 text-[var(--heading-color)] shadow-xl hover:bg-accent/90">
+          <div className="mt-7 flex w-full flex-col gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:flex-wrap">
+            <Button asChild size="lg" className="h-12 w-full rounded-full bg-[var(--color-accent)] px-6 text-[var(--heading-color)] shadow-xl hover:bg-accent/90 sm:h-13 sm:w-auto sm:px-7">
               <Link to={(hero.primary_cta_url || primaryHref) as never}>{slide.primary_cta || hero.primary_cta || primaryLabel}<ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-13 rounded-full border-white/30 bg-white/10 px-7 text-white backdrop-blur hover:bg-white/15">
+            <Button asChild size="lg" variant="outline" className="h-12 w-full rounded-full border-white/30 bg-white/10 px-6 text-white backdrop-blur hover:bg-white/15 sm:h-13 sm:w-auto sm:px-7">
               <Link to={(hero.secondary_cta_url || secondaryHref) as never}>{slide.secondary_cta || hero.secondary_cta || secondaryLabel}</Link>
             </Button>
           </div>
           {slides.length > 1 ? (
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4">
               <div className="flex gap-2">
                 {slides.map((_, index) => (
                   <button key={index} type="button" onClick={() => setActive(index)} className={`h-1.5 rounded-full transition-all ${index === active ? "w-10 bg-[var(--color-accent)]" : "w-5 bg-white/40 hover:bg-white/70"}`} aria-label={`Show slide ${index + 1}`} />
