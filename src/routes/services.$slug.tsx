@@ -17,6 +17,8 @@ import {
 import { formatCurrency, telHref, whatsappHref } from "@/lib/format";
 import { asStringArray, type Faq, type Service, type TitledItem } from "@/types/db";
 
+const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|maintenance|hybrid system)/i;
+
 export const Route = createFileRoute("/services/$slug")({
   head: () => ({
     meta: [
@@ -95,6 +97,10 @@ function ServiceDetail() {
     );
   }
 
+  const relatedSolar = (related ?? []).filter((item) =>
+    SOLAR_RE.test(`${item.title} ${item.short_description ?? ""} ${item.full_description ?? ""}`),
+  );
+
   const features = asStringArray(service.features);
   const benefits = asStringArray(service.benefits);
   const gallery = asStringArray(service.gallery);
@@ -136,7 +142,7 @@ function ServiceDetail() {
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild size="lg">
                   <Link to="/request-quote" search={{ service: service.slug }}>
-                    {service.cta_text ?? "Request a Quote"}
+                    {service.cta_text ?? "Start a solar enquiry"}
                   </Link>
                 </Button>
                 {company?.whatsapp ? (
@@ -144,7 +150,7 @@ function ServiceDetail() {
                     <a
                       href={whatsappHref(
                         company.whatsapp,
-                        `${company.whatsapp_default_message ?? "Hello, I would like to request a quotation"} for ${service.title}.`,
+                        `${company.whatsapp_default_message ?? "Hello, I would like to request a solar enquiry"} for ${service.title}.`,
                       )}
                       target="_blank"
                       rel="noreferrer noopener"
@@ -268,14 +274,14 @@ function ServiceDetail() {
           <aside className="lg:sticky lg:top-24">
             <div className="surface-panel space-y-4 p-6">
               <h2 className="font-display text-base font-semibold text-foreground">
-                Request a quotation
+                Start a solar enquiry
               </h2>
               <p className="text-sm text-muted-foreground">
                 Tell us about your site and requirements. We respond with a clear scope and price.
               </p>
               <Button asChild className="w-full">
                 <Link to="/request-quote" search={{ service: service.slug }}>
-                  Request a Quote
+                  Start a solar enquiry
                 </Link>
               </Button>
               {company?.phone ? (
@@ -293,12 +299,12 @@ function ServiceDetail() {
         </div>
       </section>
 
-      {related?.length ? (
+      {relatedSolar.length ? (
         <section className="section-y border-t border-border bg-secondary">
           <div className="container-page">
             <SectionHeading eyebrow="More" title="Related services" />
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((s) => (
+              {relatedSolar.map((s) => (
                 <ServiceCard key={s.id} service={s} />
               ))}
             </div>

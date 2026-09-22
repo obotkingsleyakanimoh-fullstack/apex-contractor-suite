@@ -22,12 +22,12 @@ export const Route = createFileRoute("/faq")({
       {
         name: "description",
         content:
-          "Answers to common questions about quotations, site visits, solar systems, painting, epoxy flooring, warranties and project timelines.",
+          "Answers to common questions about solar systems, inverter and battery storage, proposals, maintenance and project timelines.",
       },
       { property: "og:title", content: "Frequently Asked Questions" },
       {
         property: "og:description",
-        content: "Common questions about quotations, site visits, warranties and timelines.",
+        content: "Common questions about solar systems, proposals, maintenance, warranties and timelines.",
       },
     ],
   }),
@@ -64,7 +64,7 @@ function FaqPage() {
         <div className="container-page py-10">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "FAQ" }]} />
           <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Frequently asked questions
+            Solar frequently asked questions
           </h1>
         </div>
       </section>
@@ -126,7 +126,7 @@ function FaqPage() {
                 <Link to="/contact">Contact us</Link>
               </Button>
               <Button asChild>
-                <Link to="/request-quote">Request a Quote</Link>
+                <Link to="/request-quote">Start a solar enquiry</Link>
               </Button>
             </div>
           </div>

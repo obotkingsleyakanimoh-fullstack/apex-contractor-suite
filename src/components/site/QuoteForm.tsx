@@ -31,17 +31,16 @@ const schema = z.object({
   project_location: z.string().trim().max(200).optional(),
   property_type: z.string().trim().max(80).optional(),
   preferred_date: z.string().optional(),
-  budget_range: z.string().trim().max(80).optional(),
   additional_requirements: z.string().trim().max(1500).optional(),
   preferred_contact: z.string().max(30).optional(),
   consent: z.literal(true, { errorMap: () => ({ message: "Please accept to continue" }) }),
 });
 
 const PROPERTY_TYPES = ["Residential", "Commercial", "Industrial", "Estate", "Other"];
-const BUDGETS = ["Under ₦500,000", "₦500,000 – ₦2m", "₦2m – ₦10m", "Above ₦10m", "Not sure yet"];
 const CONTACT_METHODS = ["Phone call", "WhatsApp", "Email"];
 
 const ALLOWED = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_DOCUMENT_TYPES];
+const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|maintenance|hybrid system)/i;
 
 export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
   const { company } = useSiteData();
@@ -55,6 +54,10 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
         .order("sort_order")
         .order("title"),
     [],
+  );
+
+  const solarServices = (services ?? []).filter((s) =>
+    SOLAR_RE.test(`${s.title} ${(s as { short_description?: string | null }).short_description ?? ""}`),
   );
 
   const [files, setFiles] = useState<File[]>([]);
@@ -86,7 +89,6 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
       project_location: String(form.get("project_location") ?? ""),
       property_type: String(form.get("property_type") ?? ""),
       preferred_date: String(form.get("preferred_date") ?? ""),
-      budget_range: String(form.get("budget_range") ?? ""),
       additional_requirements: String(form.get("additional_requirements") ?? ""),
       preferred_contact: String(form.get("preferred_contact") ?? ""),
       consent: form.get("consent") === "on",
@@ -105,7 +107,7 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
 
     try {
       const value = parsed.data;
-      const serviceTitle = services?.find((s) => s.id === value.service_id)?.title ?? null;
+      const serviceTitle = solarServices.find((s) => s.id === value.service_id)?.title ?? null;
 
       const { data: inserted, error } = await supabase
         .from("quote_requests")
@@ -120,7 +122,6 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
           project_location: value.project_location || null,
           property_type: value.property_type || null,
           preferred_date: value.preferred_date || null,
-          budget_range: value.budget_range || null,
           additional_requirements: value.additional_requirements || null,
           preferred_contact: value.preferred_contact || null,
           consent: true,
@@ -146,7 +147,7 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
       }
 
       setDone(true);
-      toast.success("Request received. We will be in touch shortly.");
+      toast.success("Enquiry received. We will be in touch shortly.");
     } catch {
       toast.error("We could not submit your request. Please try again or call us.");
     } finally {
@@ -185,15 +186,15 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
         <Field label="Company name (optional)" name="company_name" error={errors.company_name}>
           <Input id="company_name" name="company_name" placeholder="Organisation" />
         </Field>
-        <Field label="Service required" name="service_id" error={errors.service_id}>
+        <Field label="Solar service required" name="service_id" error={errors.service_id}>
           <select
             id="service_id"
             name="service_id"
             defaultValue={defaultServiceId ?? ""}
             className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
           >
-            <option value="">Select a service</option>
-            {(services ?? []).map((s) => (
+            <option value="">Select a solar service</option>
+            {solarServices.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.title}
               </option>
@@ -217,18 +218,6 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
         </Field>
         <Field label="Preferred start date" name="preferred_date" error={errors.preferred_date}>
           <Input id="preferred_date" name="preferred_date" type="date" />
-        </Field>
-        <Field label="Budget range (optional)" name="budget_range" error={errors.budget_range}>
-          <select
-            id="budget_range"
-            name="budget_range"
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-          >
-            <option value="">Select</option>
-            {BUDGETS.map((b) => (
-              <option key={b}>{b}</option>
-            ))}
-          </select>
         </Field>
         <Field
           label="Preferred contact method"
@@ -257,7 +246,7 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
           id="project_description"
           name="project_description"
           rows={5}
-          placeholder="Tell us what you need — scope, size, current condition, timelines."
+          placeholder="Tell us what you want to power, your location, major appliances or loads, and your backup expectations."
         />
       </Field>
 

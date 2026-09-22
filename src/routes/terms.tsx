@@ -12,7 +12,7 @@ export const Route = createFileRoute("/terms")({
       {
         name: "description",
         content:
-          "Terms covering quotations, project scope, payment terms, warranties, site access and liability.",
+          "Terms covering proposals, project scope, payment terms, warranties, site access and liability.",
       },
       { property: "og:title", content: "Terms & Conditions" },
       {

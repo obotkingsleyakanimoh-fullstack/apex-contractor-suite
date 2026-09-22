@@ -6,7 +6,7 @@ export function WhatsAppFab({ context }: { context?: string }) {
   const { company } = useSiteData();
   if (!company?.whatsapp) return null;
 
-  const base = company.whatsapp_default_message ?? "Hello, I would like to request a quotation.";
+  const base = company.whatsapp_default_message ?? "Hello, I would like to request a solar enquiry.";
   const message = context ? `${base.replace(/\.$/, "")} for ${context}.` : base;
 
   return (

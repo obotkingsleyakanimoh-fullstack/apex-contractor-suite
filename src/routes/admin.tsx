@@ -3,6 +3,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import {
   Activity,
   Building2,
+  BookOpen,
   FileQuestion,
   FolderKanban,
   Image,
@@ -42,6 +43,7 @@ const NAV: { to: string; label: string; icon: any; exact?: boolean }[] = [
   { to: "/admin/services", label: "Services", icon: Wrench },
   { to: "/admin/categories", label: "Categories", icon: Tags },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban },
+  { to: "/admin/blog", label: "Blog & articles", icon: BookOpen },
   { to: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
   { to: "/admin/faqs", label: "FAQs", icon: FileQuestion },
   { to: "/admin/areas", label: "Service areas", icon: MapPin },

@@ -11,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/format";
 import { asStringArray, type Faq, type Project } from "@/types/db";
 
+const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic)/i;
+
 export const Route = createFileRoute("/projects/$slug")({
   head: () => ({
     meta: [
@@ -66,6 +68,22 @@ function ProjectDetail() {
     );
   }
 
+  const isSolarProject = !!project && SOLAR_RE.test(`${project.title} ${project.description ?? ""} ${project.slug}`);
+
+  if (project && !isSolarProject) {
+    return (
+      <SiteLayout>
+        <div className="container-page section-y">
+          <EmptyState
+            title="Solar projects only"
+            description="This website is currently focused exclusively on solar energy projects."
+            action={<Button asChild><Link to="/projects">View solar projects</Link></Button>}
+          />
+        </div>
+      </SiteLayout>
+    );
+  }
+
   if (!project) {
     return (
       <SiteLayout>
@@ -83,6 +101,10 @@ function ProjectDetail() {
       </SiteLayout>
     );
   }
+
+  const relatedSolar = (related ?? []).filter((item) =>
+    SOLAR_RE.test(`${item.title} ${item.description ?? ""} ${item.slug}`),
+  );
 
   const gallery = asStringArray(project.gallery);
   const provided = asStringArray(project.services_provided);
@@ -221,22 +243,22 @@ function ProjectDetail() {
                 </div>
               ) : null}
               <p className="text-sm text-muted-foreground">
-                Planning something similar? Send us the details for a quotation.
+                Planning something similar? Send us the details for a proposal.
               </p>
               <Button asChild className="w-full">
-                <Link to="/request-quote">Request a Quote</Link>
+                <Link to="/request-quote">Start a solar enquiry</Link>
               </Button>
             </aside>
           </div>
         </div>
       </section>
 
-      {related?.length ? (
+      {relatedSolar.length ? (
         <section className="section-y border-t border-border bg-secondary">
           <div className="container-page">
             <SectionHeading eyebrow="More work" title="Related projects" />
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((p) => (
+              {relatedSolar.map((p) => (
                 <ProjectCard key={p.id} project={p} />
               ))}
             </div>

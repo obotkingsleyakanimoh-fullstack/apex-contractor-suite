@@ -47,10 +47,10 @@ function LocationsPage() {
         <div className="container-page py-10">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Locations" }]} />
           <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Where we work
+            Where we install solar
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            We deliver projects across our service area. Check your distance from our office below.
+            We provide solar installation, inverter, battery and maintenance services across our service area. Check your distance from our office below.
           </p>
         </div>
       </section>
@@ -58,7 +58,7 @@ function LocationsPage() {
       <section className="section-y">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_340px] lg:items-start">
           <div className="min-w-0">
-            <SectionHeading eyebrow="Coverage" title="Service areas" />
+            <SectionHeading eyebrow="Coverage" title="Solar service areas" />
             <div className="mt-6">
               {loading ? (
                 <CardGridSkeleton count={6} />
@@ -89,7 +89,7 @@ function LocationsPage() {
               ) : (
                 <EmptyState
                   title="No service areas listed yet"
-                  description="Service areas added from the admin dashboard will appear here."
+                  description="Solar service areas added from the admin dashboard will appear here."
                 />
               )}
             </div>

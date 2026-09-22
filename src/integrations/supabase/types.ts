@@ -934,6 +934,111 @@ export type Database = {
         }
         Relationships: []
       }
+      website_settings: {
+        Row: {
+          accent_color: string
+          accent_font: string
+          background_color: string
+          body_font: string
+          body_font_size: number
+          body_font_weight: number
+          border_color: string
+          button_font_size: number
+          button_font_weight: number
+          footer_background: string
+          h1_font_size: number
+          h2_font_size: number
+          h3_font_size: number
+          h4_font_size: number
+          heading_color: string
+          heading_font: string
+          heading_font_weight: number
+          hero_overlay_color: string
+          hero_overlay_opacity: number
+          id: string
+          muted_text_color: string
+          navbar_background: string
+          nav_font_size: number
+          nav_font_weight: number
+          primary_color: string
+          secondary_color: string
+          site_name: string
+          singleton: boolean
+          small_text_size: number
+          surface_color: string
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string
+          accent_font?: string
+          background_color?: string
+          body_font?: string
+          body_font_size?: number
+          body_font_weight?: number
+          border_color?: string
+          button_font_size?: number
+          button_font_weight?: number
+          footer_background?: string
+          h1_font_size?: number
+          h2_font_size?: number
+          h3_font_size?: number
+          h4_font_size?: number
+          heading_color?: string
+          heading_font?: string
+          heading_font_weight?: number
+          hero_overlay_color?: string
+          hero_overlay_opacity?: number
+          id?: string
+          muted_text_color?: string
+          navbar_background?: string
+          nav_font_size?: number
+          nav_font_weight?: number
+          primary_color?: string
+          secondary_color?: string
+          site_name?: string
+          singleton?: boolean
+          small_text_size?: number
+          surface_color?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string
+          accent_font?: string
+          background_color?: string
+          body_font?: string
+          body_font_size?: number
+          body_font_weight?: number
+          border_color?: string
+          button_font_size?: number
+          button_font_weight?: number
+          footer_background?: string
+          h1_font_size?: number
+          h2_font_size?: number
+          h3_font_size?: number
+          h4_font_size?: number
+          heading_color?: string
+          heading_font?: string
+          heading_font_weight?: number
+          hero_overlay_color?: string
+          hero_overlay_opacity?: number
+          id?: string
+          muted_text_color?: string
+          navbar_background?: string
+          nav_font_size?: number
+          nav_font_weight?: number
+          primary_color?: string
+          secondary_color?: string
+          site_name?: string
+          singleton?: boolean
+          small_text_size?: number
+          surface_color?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

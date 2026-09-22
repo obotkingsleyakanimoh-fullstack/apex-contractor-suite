@@ -22,6 +22,7 @@ export type MediaItem = T["media_library"]["Row"];
 export type ActivityLog = T["admin_activity_logs"]["Row"];
 export type Profile = T["profiles"]["Row"];
 export type UserRole = T["user_roles"]["Row"];
+export type WebsiteSettings = T["website_settings"]["Row"];
 
 export type AppRole = Database["public"]["Enums"]["app_role"];
 export type QuoteStatus = Database["public"]["Enums"]["quote_status"];
@@ -30,11 +31,11 @@ export type MessageStatus = Database["public"]["Enums"]["message_status"];
 export const QUOTE_STATUSES: { value: QuoteStatus; label: string }[] = [
   { value: "new", label: "New" },
   { value: "contacted", label: "Contacted" },
-  { value: "inspection_required", label: "Inspection Required" },
-  { value: "quote_prepared", label: "Quote Prepared" },
-  { value: "negotiation", label: "Negotiation" },
-  { value: "approved", label: "Approved" },
-  { value: "rejected", label: "Rejected" },
+  { value: "inspection_required", label: "Site Assessment" },
+  { value: "quote_prepared", label: "Proposal Sent" },
+  { value: "negotiation", label: "Follow-up" },
+  { value: "approved", label: "Accepted" },
+  { value: "rejected", label: "Declined" },
   { value: "completed", label: "Completed" },
   { value: "cancelled", label: "Cancelled" },
 ];
@@ -47,6 +48,13 @@ export const MESSAGE_STATUSES: { value: MessageStatus; label: string }[] = [
 ];
 
 /** Homepage / page content shapes stored in site_content.value */
+export interface HeroSlide {
+  eyebrow?: string;
+  headline?: string;
+  subheadline?: string;
+  image_url: string;
+}
+
 export interface HeroContent {
   eyebrow?: string;
   headline?: string;
@@ -57,6 +65,23 @@ export interface HeroContent {
   secondary_cta_url?: string;
   image_url?: string;
   trust_points?: string[];
+  slides?: HeroSlide[];
+  autoplay_seconds?: number;
+  background_image_url?: string;
+}
+
+export interface PageContent {
+  eyebrow?: string;
+  headline?: string;
+  subheadline?: string;
+  body?: string;
+  primary_cta?: string;
+  primary_cta_url?: string;
+  secondary_cta?: string;
+  secondary_cta_url?: string;
+  image_url?: string;
+  slides?: HeroSlide[];
+  autoplay_seconds?: number;
 }
 
 export interface StatItem {

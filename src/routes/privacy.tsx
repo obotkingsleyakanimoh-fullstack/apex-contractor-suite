@@ -12,7 +12,7 @@ export const Route = createFileRoute("/privacy")({
       {
         name: "description",
         content:
-          "How we collect, use, store and protect customer information submitted through quotation and contact forms.",
+          "How we collect, use, store and protect customer information submitted through enquiry and contact forms.",
       },
       { property: "og:title", content: "Privacy Policy" },
       {

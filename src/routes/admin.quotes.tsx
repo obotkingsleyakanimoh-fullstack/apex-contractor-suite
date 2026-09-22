@@ -50,10 +50,10 @@ function AdminQuotes() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-          Quote requests
+          Solar enquiries
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Every quotation submitted from the website, with status and internal notes.
+          Every solar enquiry submitted from the website, with status and internal notes.
         </p>
       </div>
 
@@ -94,7 +94,7 @@ function AdminQuotes() {
         </div>
       ) : rows.length === 0 ? (
         <EmptyState
-          title="No quotation requests yet"
+          title="No solar enquiries yet"
           description="Requests submitted from the website will appear here."
         />
       ) : (
@@ -164,7 +164,7 @@ function AdminQuotes() {
       <Dialog open={selected !== null} onOpenChange={(o) => (o ? null : setSelected(null))}>
         <DialogContent className="max-h-[88vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Quotation request</DialogTitle>
+            <DialogTitle>Solar enquiry</DialogTitle>
           </DialogHeader>
           {selected ? (
             <QuoteDetail
@@ -200,7 +200,6 @@ function QuoteDetail({
   const [status, setStatus] = useState<QuoteStatus>(quote.status);
   const [internal, setInternal] = useState(quote.internal_notes ?? "");
   const [customerNotes, setCustomerNotes] = useState(quote.customer_notes ?? "");
-  const [value, setValue] = useState(quote.estimated_value?.toString() ?? "");
   const [followUp, setFollowUp] = useState(quote.follow_up_date ?? "");
   const [saving, setSaving] = useState(false);
 
@@ -217,7 +216,6 @@ function QuoteDetail({
         status,
         internal_notes: internal || null,
         customer_notes: customerNotes || null,
-        estimated_value: value === "" ? null : Number(value),
         follow_up_date: followUp || null,
       })
       .eq("id", quote.id)
@@ -229,12 +227,12 @@ function QuoteDetail({
       return;
     }
     void logActivity({
-      action: "updated quote status",
+      action: "updated solar enquiry status",
       entity: "quote_requests",
       entityId: quote.id,
       details: `Status set to ${status}`,
     });
-    toast.success("Quote request updated.");
+    toast.success("Solar enquiry updated.");
     onSaved(data as QuoteRequest);
   }
 
@@ -258,7 +256,6 @@ function QuoteDetail({
         <Detail label="Property type" value={quote.property_type ?? "—"} />
         <Detail label="Location" value={quote.project_location ?? "—"} />
         <Detail label="Preferred date" value={quote.preferred_date ?? "—"} />
-        <Detail label="Budget" value={quote.budget_range ?? "—"} />
         <Detail label="Preferred contact" value={quote.preferred_contact ?? "—"} />
         <Detail label="Received" value={formatDateTime(quote.created_at)} />
         <Detail label="Last updated" value={formatDateTime(quote.updated_at)} />
@@ -295,7 +292,7 @@ function QuoteDetail({
         </Button>
         {quote.email ? (
           <Button asChild size="sm" variant="outline">
-            <a href={mailtoHref(quote.email, "Your quotation request")}>
+            <a href={mailtoHref(quote.email, "Your solar enquiry")}>
               <Mail className="mr-1.5 h-3.5 w-3.5" /> Email
             </a>
           </Button>
@@ -346,19 +343,6 @@ function QuoteDetail({
               </option>
             ))}
           </select>
-        </div>
-        <div>
-          <Label htmlFor="value">Estimated value</Label>
-          <Input
-            id="value"
-            type="number"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            className="mt-1.5"
-          />
-          <p className="mt-1 text-xs text-muted-foreground">
-            Current: {formatCurrency(quote.estimated_value ? Number(quote.estimated_value) : null)}
-          </p>
         </div>
         <div>
           <Label htmlFor="followup">Follow-up date</Label>

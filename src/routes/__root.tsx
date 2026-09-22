@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SiteDataProvider } from "@/hooks/useSiteData";
+import { AppearanceProvider } from "@/hooks/useAppearance";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -91,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;500;600;700;800&family=Lato:wght@400;700;900&family=Nunito:wght@400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Raleway:wght@400;500;600;700;800&family=Merriweather:wght@400;700;900&family=Playfair+Display:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -122,9 +123,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <SiteDataProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <Toaster position="top-right" richColors closeButton />
+          <AppearanceProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <Toaster position="top-right" richColors closeButton />
+          </AppearanceProvider>
         </SiteDataProvider>
       </AuthProvider>
     </QueryClientProvider>

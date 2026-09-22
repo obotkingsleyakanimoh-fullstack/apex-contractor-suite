@@ -1,160 +1,39 @@
-import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseData } from "@/hooks/useSupabaseData";
+import { useSiteContent } from "@/hooks/useSiteContent";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { ProjectCard } from "@/routes/index";
-import {
-  Breadcrumbs,
-  CardGridSkeleton,
-  EmptyState,
-  SectionHeading,
-} from "@/components/site/shared";
-import type { Project, ServiceCategory } from "@/types/db";
+import { ImageBox } from "@/components/site/shared";
+import { PageHeroCarousel } from "@/components/site/PageHeroCarousel";
+import type { HeroContent, Project } from "@/types/db";
 
-export const Route = createFileRoute("/projects/")({
-  head: () => ({
-    meta: [
-      { title: "Projects — Completed Solar, Painting & Flooring Work" },
-      {
-        name: "description",
-        content:
-          "A portfolio of completed solar installations, epoxy flooring, painting and electrical projects across Nigeria.",
-      },
-      { property: "og:title", content: "Our Projects" },
-      {
-        property: "og:description",
-        content: "Completed solar, epoxy flooring, painting and electrical projects.",
-      },
-    ],
-  }),
-  component: ProjectsPage,
-});
+const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|hybrid system|maintenance)/i;
+
+export const Route = createFileRoute("/projects/")({ head: () => ({ meta: [
+  { title: "Solar Projects | Zitso Energy" },
+  { name: "description", content: "Selected solar, inverter and battery installations by Zitso Energy." },
+]}), component: ProjectsPage });
+
+const FALLBACK_HERO: HeroContent["slides"] = [
+  { image_url: "/images/solar-installation.webp", eyebrow: "Our solar work", headline: "Solar projects that put power to work.", subheadline: "Explore selected installations, inverter systems and energy-storage projects." },
+  { image_url: "/images/commercial-project.webp", eyebrow: "Commercial • Industrial", headline: "Energy systems designed around real operating demands.", subheadline: "From load assessment to installation and maintenance, every project starts with the way power is actually used." },
+  { image_url: "/images/inverter-installation.webp", eyebrow: "Inverter • Battery • Backup", headline: "Practical systems for dependable everyday power.", subheadline: "See how solar generation, battery storage and hybrid inverters work together in completed projects." },
+];
 
 function ProjectsPage() {
-  const [category, setCategory] = useState("all");
-  const [year, setYear] = useState("all");
-  const [city, setCity] = useState("all");
+  const { data: projects, loading } = useSupabaseData<Project[]>(() => supabase.from("projects").select("*").eq("published", true).order("featured", { ascending: false }).order("sort_order"), []);
+  const { get } = useSiteContent();
+  const hero = get<HeroContent>("projects_hero", {});
+  const solarProjects = (projects ?? []).filter((p) => SOLAR_RE.test(`${p.title} ${p.description ?? ""} ${p.slug} ${p.services_provided ?? ""}`));
 
-  const { data: categories } = useSupabaseData<ServiceCategory[]>(
-    () => supabase.from("service_categories").select("*").eq("published", true).order("sort_order"),
-    [],
-  );
-
-  const { data: projects, loading } = useSupabaseData<Project[]>(
-    () =>
-      supabase
-        .from("projects")
-        .select("*")
-        .eq("published", true)
-        .order("featured", { ascending: false })
-        .order("sort_order"),
-    [],
-  );
-
-  const years = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of projects ?? []) {
-      const d = p.completion_date ?? p.project_date;
-      if (d) set.add(String(new Date(d).getFullYear()));
-    }
-    return Array.from(set).sort().reverse();
-  }, [projects]);
-
-  const cities = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of projects ?? []) if (p.city) set.add(p.city);
-    return Array.from(set).sort();
-  }, [projects]);
-
-  const filtered = (projects ?? []).filter((p) => {
-    if (category !== "all" && p.category_id !== category) return false;
-    if (city !== "all" && p.city !== city) return false;
-    if (year !== "all") {
-      const d = p.completion_date ?? p.project_date;
-      if (!d || String(new Date(d).getFullYear()) !== year) return false;
-    }
-    return true;
-  });
-
-  const selectClass =
-    "h-10 w-full rounded-md border border-input bg-background px-3 text-sm sm:w-auto";
-
-  return (
-    <SiteLayout>
-      <section className="border-b border-border bg-secondary">
-        <div className="container-page py-10">
-          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Projects" }]} />
-          <SectionHeading
-            eyebrow="Portfolio"
-            title="Completed projects"
-            description="Selected work delivered for residential, commercial and industrial clients."
-          />
-        </div>
-      </section>
-
-      <section className="section-y">
-        <div className="container-page">
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <select
-              aria-label="Filter by category"
-              className={selectClass}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="all">All categories</option>
-              {(categories ?? []).map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            <select
-              aria-label="Filter by city"
-              className={selectClass}
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            >
-              <option value="all">All locations</option>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-            <select
-              aria-label="Filter by year"
-              className={selectClass}
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            >
-              <option value="all">All years</option>
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-8">
-            {loading ? (
-              <CardGridSkeleton count={6} />
-            ) : filtered.length ? (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((p) => (
-                  <ProjectCard key={p.id} project={p} />
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No projects found"
-                description="Try clearing the filters to see all published projects."
-              />
-            )}
-          </div>
-        </div>
-      </section>
-    </SiteLayout>
-  );
+  return <SiteLayout>
+    <PageHeroCarousel hero={hero} fallbackSlides={FALLBACK_HERO} primaryHref="/request-quote" secondaryHref="/services" primaryLabel="Start a solar project" secondaryLabel="Explore solar solutions" />
+    <section className="section-y">
+      <div className="container-page">
+        <div className="mb-10 max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-primary)]">{hero.eyebrow || "Selected installations"}</p><h2 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">{hero.headline ? "Work designed to perform in the real world." : "Solar installations and energy projects."}</h2><p className="mt-4 text-base leading-7 text-muted-foreground">{hero.subheadline || "Explore selected solar installations, inverter systems and battery-storage projects."}</p></div>
+        {loading ? <p className="text-sm text-muted-foreground">Loading projects…</p> : solarProjects.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{solarProjects.map((project) => <Link key={project.id} to="/projects/$slug" params={{ slug: project.slug }} className="group overflow-hidden rounded-[1.5rem] border border-border bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"><ImageBox src={project.hero_image_url} fallbackSrc="/images/solar-installation.webp" alt={project.title} className="aspect-[4/3] w-full transition-transform duration-700 group-hover:scale-105" /><div className="p-6"><p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">{project.location ?? "Nigeria"}</p><h2 className="mt-2 font-display text-xl font-bold">{project.title}</h2>{project.description ? <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{project.description}</p> : null}<span className="mt-5 inline-flex items-center text-sm font-bold text-[var(--color-primary)]">View project <ArrowRight className="ml-1 h-4 w-4" /></span></div></Link>)}</div> : <div className="rounded-2xl border border-dashed border-border p-14 text-center"><h2 className="font-display text-2xl font-bold">Solar case studies coming soon</h2><p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-muted-foreground">Published solar projects will appear here.</p></div>}
+      </div>
+    </section>
+  </SiteLayout>;
 }

@@ -55,7 +55,7 @@ function AdminServices() {
         { name: "category_id", label: "Category", type: "select", options },
         { name: "short_description", label: "Short description", type: "textarea" },
         { name: "full_description", label: "Full description", type: "textarea" },
-        { name: "hero_image_url", label: "Hero image URL", type: "text", full: true },
+        { name: "hero_image_url", label: "Hero image", type: "image", full: true },
         {
           name: "gallery",
           label: "Gallery image URLs",
@@ -69,7 +69,7 @@ function AdminServices() {
         { name: "cta_text", label: "CTA button text", type: "text" },
         { name: "seo_title", label: "SEO title", type: "text" },
         { name: "seo_description", label: "SEO description", type: "textarea" },
-        { name: "og_image_url", label: "Social share image URL", type: "text", full: true },
+        { name: "og_image_url", label: "Social share image", type: "image", full: true },
         { name: "sort_order", label: "Sort order", type: "number" },
         { name: "featured", label: "Featured service", type: "checkbox" },
         { name: "published", label: "Published", type: "checkbox" },

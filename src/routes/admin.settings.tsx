@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { WebsiteAppearance } from "@/components/admin/WebsiteAppearance";
 
 export const Route = createFileRoute("/admin/settings")({ component: AdminSettings });
 
@@ -42,8 +43,9 @@ function AdminSettings() {
   }
 
   return (
-    <div className="space-y-6">
-      <div><h1 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">Settings</h1><p className="mt-1 text-sm text-muted-foreground">Manage the signed-in administrator account and security basics.</p></div>
+    <div className="space-y-10">
+      <div><h1 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">Settings</h1><p className="mt-1 text-sm text-muted-foreground">Manage the website appearance and the signed-in administrator account.</p></div>
+      <WebsiteAppearance />
       <section className="surface-panel max-w-2xl p-5 sm:p-7">
         <h2 className="font-display text-base font-semibold">Account profile</h2>
         <div className="mt-5 space-y-4">

@@ -5,6 +5,7 @@ import {
   Mail,
   MapPin,
   MessageSquareQuote,
+  Palette,
   Quote,
   Wrench,
 } from "lucide-react";
@@ -167,7 +168,7 @@ function AdminDashboard() {
               </li>
             ))}
             {recent && recent.length === 0 ? (
-              <li className="py-6 text-sm text-muted-foreground">No quotation requests yet.</li>
+              <li className="py-6 text-sm text-muted-foreground">No solar enquirys yet.</li>
             ) : null}
           </ul>
           <Button asChild variant="outline" className="mt-4">
@@ -214,6 +215,7 @@ function AdminDashboard() {
       <div className="grid gap-4 sm:grid-cols-3">
         <QuickLink to="/admin/testimonials" icon={MessageSquareQuote} label="Testimonials" />
         <QuickLink to="/admin/faqs" icon={FileQuestion} label="FAQs" />
+        <QuickLink to="/admin/settings" icon={Palette} label="Website Appearance" />
         <QuickLink to="/admin/content" icon={Wrench} label="Content & business" />
       </div>
     </div>

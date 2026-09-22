@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +36,7 @@ export type Row = Record<string, any>;
 export interface FieldSpec {
   name: string;
   label: string;
-  type: "text" | "textarea" | "number" | "checkbox" | "select" | "date" | "list";
+  type: "text" | "textarea" | "number" | "checkbox" | "select" | "date" | "list" | "image" | "image-list";
   options?: { value: string; label: string }[];
   placeholder?: string;
   help?: string;
@@ -65,13 +66,13 @@ interface Props {
 
 function toFormValue(row: Row, field: FieldSpec): any {
   const raw = row[field.name];
-  if (field.type === "list") return Array.isArray(raw) ? raw.join("\n") : "";
+  if (field.type === "list" || field.type === "image-list") return Array.isArray(raw) ? raw.join("\n") : "";
   if (field.type === "checkbox") return Boolean(raw);
   return raw ?? "";
 }
 
 function fromFormValue(value: any, field: FieldSpec): any {
-  if (field.type === "list") {
+  if (field.type === "list" || field.type === "image-list") {
     return String(value ?? "")
       .split("\n")
       .map((s) => s.trim())
@@ -334,7 +335,7 @@ export function CrudManager({
               <div
                 key={field.name}
                 className={
-                  field.full || field.type === "textarea" || field.type === "list"
+                  field.full || field.type === "textarea" || field.type === "list" || field.type === "image-list"
                     ? "sm:col-span-2"
                     : ""
                 }
@@ -370,6 +371,8 @@ export function CrudManager({
                           placeholder={field.placeholder ?? "One item per line"}
                           onChange={(e) => setField(field, e.target.value)}
                         />
+                      ) : field.type === "image" || field.type === "image-list" ? (
+                        <MediaUploadField value={String(form[field.name] ?? "")} multiple={field.type === "image-list"} onChange={(value) => setField(field, value)} />
                       ) : field.type === "select" ? (
                         <select
                           id={field.name}
