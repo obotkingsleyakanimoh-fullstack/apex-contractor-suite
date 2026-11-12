@@ -128,6 +128,7 @@ export function ImageBox({
       src={resolvedSrc}
       alt={alt}
       loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "auto"}
       decoding="async"
       className={cn("object-cover", className)}
     />

@@ -280,7 +280,7 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
       <div>
         <Label className="text-sm font-semibold">Site photos or documents (optional)</Label>
         <p className="mt-1 text-xs text-muted-foreground">
-          Images, PDFs and office documents up to {maxMb}MB each. Maximum 6 files.
+          Images, PDFs and office documents up to {maxMb}MB each. Images are automatically resized and saved as WebP for faster handling. Animated GIFs and documents keep their original format. Maximum 6 files.
         </p>
         <label className="mt-3 flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-input px-4 py-3 text-sm text-muted-foreground hover:border-accent">
           <Paperclip className="h-4 w-4" />

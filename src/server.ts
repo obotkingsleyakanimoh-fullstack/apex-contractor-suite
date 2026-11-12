@@ -47,6 +47,14 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const requestUrl = new URL(request.url);
+      const requestHost = requestUrl.hostname.toLowerCase();
+      const isProductionDomain = requestHost === "zitsoenergy.com" || requestHost === "www.zitsoenergy.com";
+      if (isProductionDomain && (requestUrl.protocol !== "https:" || requestHost.startsWith("www."))) {
+        requestUrl.protocol = "https:";
+        requestUrl.hostname = "zitsoenergy.com";
+        return Response.redirect(requestUrl.toString(), 308);
+      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

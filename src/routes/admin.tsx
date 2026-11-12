@@ -33,7 +33,7 @@ export const Route = createFileRoute("/admin")({
     meta: [
       { title: "Admin Dashboard" },
       { name: "description", content: "Manage website content, leads and business information." },
-      { name: "robots", content: "noindex" },
+      { name: "robots", content: "noindex,nofollow" },
     ],
   }),
   component: AdminLayout,

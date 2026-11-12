@@ -41,6 +41,6 @@ export function MediaUploadField({ value, onChange, multiple = false }: { value:
         <button type="button" onClick={() => remove(url)} className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-white" aria-label="Remove image"><X className="h-3.5 w-3.5" /></button>
       </div>)}
     </div>
-    <p className="text-xs text-muted-foreground">Choose a file from your computer. It is uploaded directly to the Supabase media bucket; no image URL is required.</p>
+    <p className="text-xs text-muted-foreground">Choose a file from your computer. Images are resized and converted to WebP before they are saved to the media library; animated GIFs are preserved.</p>
   </div>;
 }

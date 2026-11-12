@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,21 +17,7 @@ import { directionsUrl } from "@/lib/geo";
 import type { ServiceArea } from "@/types/db";
 
 export const Route = createFileRoute("/locations")({
-  head: () => ({
-    meta: [
-      { title: "Service Areas & Office Location" },
-      {
-        name: "description",
-        content:
-          "See the cities and areas we serve, check how far you are from our office, and get directions.",
-      },
-      { property: "og:title", content: "Service Areas & Office Location" },
-      {
-        property: "og:description",
-        content: "Cities and areas we serve, plus directions to our office.",
-      },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Solar Installation Service Areas | Zitso Energy', description: 'Explore Zitso Energy service areas for solar installation, hybrid inverter systems, battery storage and solar maintenance in Nigeria.', path: '/locations' }),
   component: LocationsPage,
 });
 

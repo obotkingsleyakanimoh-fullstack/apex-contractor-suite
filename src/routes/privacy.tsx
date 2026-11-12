@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,22 +6,7 @@ import { Breadcrumbs } from "@/components/site/shared";
 import { openAnalyticsPreferences } from "@/lib/analytics";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy | Zitso Energy" },
-      {
-        name: "description",
-        content:
-          "Read how Zitso Energy collects, uses, protects and shares enquiry information and consent-based website analytics.",
-      },
-      { property: "og:title", content: "Privacy Policy | Zitso Energy" },
-      {
-        property: "og:description",
-        content: "How Zitso Energy handles personal information and website analytics.",
-      },
-      { name: "robots", content: "index,follow" },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Privacy Policy | Zitso Energy', description: 'Read how Zitso Energy collects, uses, protects and shares enquiry information and consent-based website analytics.', path: '/privacy' }),
   component: PrivacyPage,
 });
 

@@ -324,3 +324,92 @@
 .blog-content strong { color: var(--heading-color); font-weight: 700; }
 .blog-content blockquote { margin: 1.5rem 0; border-left: 4px solid var(--color-accent); padding: .75rem 1rem; background: var(--color-surface); }
 .blog-content img { display: block; width: 100%; height: auto; margin: 1.5rem 0; border-radius: 1rem; }
+
+
+/* Public-site finish: restrained engineering palette, cleaner surfaces and clearer focus. */
+:root {
+  --radius: 0.75rem;
+  --shadow-card: 0 1px 2px oklch(0.24 0.035 165 / 0.035), 0 12px 34px oklch(0.24 0.035 165 / 0.055);
+  --shadow-raised: 0 5px 12px oklch(0.24 0.035 165 / 0.08), 0 24px 54px oklch(0.24 0.035 165 / 0.13);
+}
+
+.site-shell {
+  background: var(--color-background);
+}
+
+.site-main {
+  min-width: 0;
+}
+
+.site-main .surface-panel {
+  border-radius: 1.125rem;
+  box-shadow: var(--shadow-card);
+}
+
+.site-main a.site-card {
+  border-color: color-mix(in srgb, var(--color-border) 84%, var(--color-primary) 16%);
+  border-radius: 1.2rem;
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+.site-main a.site-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-primary) 36%, var(--color-border));
+  box-shadow: var(--shadow-raised);
+}
+
+.site-hero {
+  isolation: isolate;
+}
+
+.site-hero img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.site-navbar {
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.site-navbar a:focus-visible,
+.site-navbar button:focus-visible,
+.site-footer a:focus-visible,
+.site-main a:focus-visible,
+.site-main button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 78%, white);
+  outline-offset: 3px;
+}
+
+.site-main input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.site-main select,
+.site-main textarea {
+  border-radius: 0.7rem;
+  background-color: var(--color-card);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.site-main input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.site-main select:focus,
+.site-main textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 13%, transparent);
+  outline: none;
+}
+
+.site-main p {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-main a.site-card,
+  .site-hero *,
+  .site-navbar * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

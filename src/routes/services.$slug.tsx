@@ -7,7 +7,6 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Breadcrumbs, EmptyState, ImageBox, SectionHeading } from "@/components/site/shared";
 import { ServiceCard, serviceFallback } from "@/routes/index";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Accordion,
   AccordionContent,
@@ -16,32 +15,35 @@ import {
 } from "@/components/ui/accordion";
 import { formatCurrency, telHref, whatsappHref } from "@/lib/format";
 import { asStringArray, type Faq, type Service, type TitledItem } from "@/types/db";
+import { createPageHead, safeJsonLd, SITE_ORIGIN } from "@/lib/seo";
 
 const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|maintenance|hybrid system)/i;
 
 export const Route = createFileRoute("/services/$slug")({
-  head: () => ({
-    meta: [
-      { title: "Service details" },
-      { name: "description", content: "Service scope, benefits, process and frequently asked questions." },
-      { property: "og:title", content: "Service details" },
-      {
-        property: "og:description",
-        content: "Service scope, benefits, process and frequently asked questions.",
-      },
-    ],
-  }),
+  loader: async ({ params }) => {
+    try {
+      const { data } = await supabase.from("services").select("*").eq("slug", params.slug).eq("published", true).maybeSingle();
+      return { seoLookupFailed: false, seoService: data as Service | null };
+    } catch {
+      return { seoLookupFailed: true, seoService: null as Service | null };
+    }
+  },
+  head: ({ loaderData, params }) => {
+    const service = loaderData?.seoService;
+    return createPageHead({
+      title: service?.seo_title || (service ? `${service.title} | Solar & Inverter Services | Zitso Energy` : "Solar Service | Zitso Energy"),
+      description: service?.seo_description || service?.short_description || service?.full_description || "Explore solar installation, inverter, battery storage and maintenance services from Zitso Energy.",
+      path: `/services/${encodeURIComponent(params.slug)}`,
+      image: service?.og_image_url || service?.hero_image_url,
+      noIndex: !service && !loaderData?.seoLookupFailed,
+    });
+  },
   component: ServiceDetail,
 });
 
 function ServiceDetail() {
-  const { slug } = Route.useParams();
+  const { seoService: service, seoLookupFailed } = Route.useLoaderData();
   const { company } = useSiteData();
-
-  const { data: service, loading } = useSupabaseData<Service>(
-    () => supabase.from("services").select("*").eq("slug", slug).eq("published", true).maybeSingle(),
-    [slug],
-  );
 
   const { data: faqs } = useSupabaseData<Faq[]>(
     () =>
@@ -66,14 +68,11 @@ function ServiceDetail() {
     [service?.id],
   );
 
-  if (loading) {
+  if (seoLookupFailed) {
     return (
       <SiteLayout>
-        <div className="container-page section-y space-y-5">
-          <Skeleton className="h-8 w-2/3" />
-          <Skeleton className="h-64 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-4/5" />
+        <div className="container-page section-y">
+          <EmptyState title="Service details are temporarily unavailable" description="Please try again shortly or contact Zitso Energy for information about this service." action={<Button asChild><Link to="/contact">Contact Zitso Energy</Link></Button>} />
         </div>
       </SiteLayout>
     );
@@ -108,8 +107,21 @@ function ServiceDetail() {
     ? (service.process_steps as unknown as TitledItem[])
     : [];
 
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.seo_description || service.short_description || service.full_description,
+    url: `${SITE_ORIGIN}/services/${encodeURIComponent(service.slug)}`,
+    ...(service.hero_image_url ? { image: service.hero_image_url } : {}),
+    provider: { "@type": "Organization", name: "Zitso Energy", url: SITE_ORIGIN },
+    areaServed: { "@type": "Country", name: "Nigeria" },
+    serviceType: service.title,
+  };
+
   return (
     <SiteLayout whatsappContext={service.title}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceSchema) }} />
       <section className="border-b border-border bg-secondary">
         <div className="container-page py-10">
           <Breadcrumbs

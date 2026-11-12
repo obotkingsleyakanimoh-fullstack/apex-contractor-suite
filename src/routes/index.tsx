@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -26,22 +27,7 @@ const SOLAR_RE =
   /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|maintenance|hybrid system)/i;
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Zitso Energy | Solar Power & Energy Storage" },
-      {
-        name: "description",
-        content:
-          "Reliable solar power, hybrid inverter systems, battery storage and solar maintenance for homes and businesses across Nigeria.",
-      },
-      { property: "og:title", content: "Zitso Energy | Solar Power & Energy Storage" },
-      {
-        property: "og:description",
-        content:
-          "Designed solar energy systems, quality installation and dependable after-sales maintenance.",
-      },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Solar Panel Installation & Inverter Systems in Nigeria | Zitso Energy', description: 'Plan dependable solar power with Zitso Energy. Explore solar panel installation, hybrid inverters, battery storage and maintenance for homes and businesses in Nigeria.', path: '/' }),
   component: HomePage,
 });
 
@@ -65,12 +51,12 @@ function HeroCarousel({ hero }: { hero: HeroContent }) {
   const go = (delta: number) => setActive((v) => (v + delta + slides.length) % slides.length);
   if (!slide) return null;
 
-  return <section className="relative min-h-[620px] overflow-hidden bg-[var(--hero-overlay)] text-white sm:min-h-[720px] lg:min-h-[820px]" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={(e) => setDragStart(e.touches[0].clientX)} onTouchEnd={(e) => { if (dragStart === null) return; const delta = e.changedTouches[0].clientX - dragStart; if (Math.abs(delta) > 50) go(delta < 0 ? 1 : -1); setDragStart(null); }}>
-    {slides.map((s, i) => <div key={`${s.image_url}-${i}`} className={`absolute inset-0 transition-all duration-[1400ms] ease-out ${i === active ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-[1.035]"}`} aria-hidden={i !== active}><img src={s.image_url} alt="" className="h-full w-full object-cover object-[center_35%] sm:object-center" /><div className="absolute inset-0" style={{ background: `linear-gradient(90deg, color-mix(in srgb, var(--hero-overlay) 96%, transparent), color-mix(in srgb, var(--hero-overlay) 70%, transparent), color-mix(in srgb, var(--hero-overlay) 25%, transparent))`, opacity: "var(--hero-overlay-opacity)" }} /><div className="absolute inset-0" style={{ background: `linear-gradient(0deg, color-mix(in srgb, var(--hero-overlay) 82%, transparent), transparent 60%, color-mix(in srgb, var(--hero-overlay) 10%, transparent))` }} /></div>)}
-    <div className="container-page relative flex min-h-[720px] items-end py-20 sm:min-h-[720px] lg:min-h-[820px] lg:items-center lg:py-24">
+  return <section className="site-hero relative min-h-[580px] overflow-hidden bg-[var(--hero-overlay)] text-white sm:min-h-[650px] lg:min-h-[760px]" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={(e) => setDragStart(e.touches[0].clientX)} onTouchEnd={(e) => { if (dragStart === null) return; const delta = e.changedTouches[0].clientX - dragStart; if (Math.abs(delta) > 50) go(delta < 0 ? 1 : -1); setDragStart(null); }}>
+    {slides.map((s, i) => <div key={`${s.image_url}-${i}`} className={`absolute inset-0 transition-all duration-[1000ms] ease-out ${i === active ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-[1.025]"}`} aria-hidden={i !== active}>{(i === active || i === (active + 1) % slides.length) ? <img src={s.image_url} alt="" loading={i === active ? "eager" : "lazy"} decoding="async" fetchPriority={i === active ? "high" : "low"} className="h-full w-full object-cover object-[center_35%] sm:object-center" /> : null}<div className="absolute inset-0" style={{ background: `linear-gradient(90deg, color-mix(in srgb, var(--hero-overlay) 96%, transparent), color-mix(in srgb, var(--hero-overlay) 70%, transparent), color-mix(in srgb, var(--hero-overlay) 25%, transparent))`, opacity: "var(--hero-overlay-opacity)" }} /><div className="absolute inset-0" style={{ background: `linear-gradient(0deg, color-mix(in srgb, var(--hero-overlay) 82%, transparent), transparent 60%, color-mix(in srgb, var(--hero-overlay) 10%, transparent))` }} /></div>)}
+    <div className="container-page relative flex min-h-[650px] items-end py-16 sm:min-h-[650px] sm:py-20 lg:min-h-[760px] lg:items-center lg:py-24">
       <div className="w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-sm">{slide.eyebrow || "Solar energy • Battery storage • Inverter systems"}</p>
-        <h1 className="mt-4 max-w-4xl break-words font-display text-[2.7rem] font-bold leading-[0.98] tracking-[-0.04em] sm:mt-5 sm:text-6xl lg:text-[6.4rem]">{slide.headline || hero.headline || "Power your home with energy you can depend on."}</h1>
+        <h1 className="mt-4 max-w-4xl break-words font-display text-[2.55rem] font-bold leading-[1.02] tracking-[-0.045em] sm:mt-5 sm:text-6xl lg:text-[5.6rem]">{slide.headline || hero.headline || "Power your home with energy you can depend on."}</h1>
         <p className="mt-5 max-w-2xl text-[0.98rem] leading-6 text-white/78 sm:mt-7 sm:text-xl sm:leading-8">{slide.subheadline || hero.subheadline}</p>
         <div className="mt-7 flex w-full flex-col gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:flex-wrap"><Button asChild size="lg" className="h-12 w-full rounded-full bg-[var(--color-accent)] px-6 text-[var(--heading-color)] shadow-xl hover:bg-accent/90 sm:h-13 sm:w-auto sm:px-7"><Link to="/request-quote">Get a solar assessment <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 w-full rounded-full border-white/30 bg-white/10 px-6 text-white backdrop-blur hover:bg-white/15 sm:h-13 sm:w-auto sm:px-7"><Link to="/services">Explore solar solutions</Link></Button></div>
         <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"><div className="flex gap-2">{slides.map((_, i) => <button key={i} type="button" onClick={() => setActive(i)} className={`h-1.5 rounded-full transition-all ${i === active ? "w-10 bg-[var(--color-accent)]" : "w-5 bg-white/40 hover:bg-white/70"}`} aria-label={`Show slide ${i + 1}`} />)}</div><span className="text-xs text-white/55">Swipe to explore</span></div>
@@ -257,7 +243,7 @@ function HomePage() {
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {solarProjects.length ? solarProjects.map((project) => (
-              <Link key={project.id} to="/projects/$slug" params={{ slug: project.slug }} className="group overflow-hidden rounded-2xl border border-border bg-white">
+              <Link key={project.id} to="/projects/$slug" params={{ slug: project.slug }} className="site-card group overflow-hidden rounded-2xl border border-border bg-white">
                 <ImageBox src={project.hero_image_url} fallbackSrc="/images/solar-installation.webp" alt={project.title} className="aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-105" />
                 <div className="p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-primary)]">{project.location ?? "Nigeria"}</p>
@@ -319,7 +305,7 @@ export function ServiceCard({ service }: { service: Service }) {
     <Link
       to="/services/$slug"
       params={{ slug: service.slug }}
-      className="group overflow-hidden rounded-2xl border border-border bg-white"
+      className="site-card group overflow-hidden rounded-2xl border border-border bg-white"
     >
       <ImageBox
         src={service.hero_image_url}
@@ -345,7 +331,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <Link
       to="/projects/$slug"
       params={{ slug: project.slug }}
-      className="group overflow-hidden rounded-2xl border border-border bg-white"
+      className="site-card group overflow-hidden rounded-2xl border border-border bg-white"
     >
       <ImageBox
         src={project.hero_image_url}

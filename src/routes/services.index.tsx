@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { BatteryCharging, Sun, Wrench, Zap, ArrowRight, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,15 +13,7 @@ import type { HeroContent, Service } from "@/types/db";
 const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic|maintenance|hybrid system)/i;
 
 export const Route = createFileRoute("/services/")({
-  head: () => ({
-    meta: [
-      { title: "Solar Solutions | Zitso Energy" },
-      {
-        name: "description",
-        content: "Solar installation, hybrid inverter systems, battery storage, energy assessment and solar maintenance.",
-      },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Solar Installation, Inverter & Battery Services | Zitso Energy', description: 'Explore solar panel installation, hybrid inverter systems, battery storage, energy assessments and solar maintenance from Zitso Energy.', path: '/services' }),
   component: ServicesPage,
 });
 

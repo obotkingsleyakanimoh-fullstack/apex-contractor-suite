@@ -7,31 +7,36 @@ import { Breadcrumbs, EmptyState, ImageBox, SectionHeading } from "@/components/
 import { BeforeAfterSlider } from "@/components/site/BeforeAfterSlider";
 import { ProjectCard, projectFallback } from "@/routes/index";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/format";
 import { asStringArray, type Faq, type Project } from "@/types/db";
+import { createPageHead, safeJsonLd, SITE_ORIGIN } from "@/lib/seo";
 
 const SOLAR_RE = /(solar|inverter|battery|energy storage|backup power|pv|photovoltaic)/i;
 
 export const Route = createFileRoute("/projects/$slug")({
-  head: () => ({
-    meta: [
-      { title: "Project details" },
-      { name: "description", content: "Project scope, gallery and outcome." },
-      { property: "og:title", content: "Project details" },
-      { property: "og:description", content: "Project scope, gallery and outcome." },
-    ],
-  }),
+  loader: async ({ params }) => {
+    try {
+      const { data } = await supabase.from("projects").select("*").eq("slug", params.slug).eq("published", true).maybeSingle();
+      return { seoLookupFailed: false, seoProject: data as Project | null };
+    } catch {
+      return { seoLookupFailed: true, seoProject: null as Project | null };
+    }
+  },
+  head: ({ loaderData, params }) => {
+    const project = loaderData?.seoProject;
+    return createPageHead({
+      title: project?.seo_title || (project ? `${project.title} | Solar Project by Zitso Energy` : "Solar Project | Zitso Energy"),
+      description: project?.seo_description || project?.description || "Explore a solar power, inverter or battery storage installation by Zitso Energy in Nigeria.",
+      path: `/projects/${encodeURIComponent(params.slug)}`,
+      image: project?.og_image_url || project?.hero_image_url,
+      noIndex: !project && !loaderData?.seoLookupFailed,
+    });
+  },
   component: ProjectDetail,
 });
 
 function ProjectDetail() {
-  const { slug } = Route.useParams();
-
-  const { data: project, loading } = useSupabaseData<Project>(
-    () => supabase.from("projects").select("*").eq("slug", slug).eq("published", true).maybeSingle(),
-    [slug],
-  );
+  const { seoProject: project, seoLookupFailed } = Route.useLoaderData();
 
   const { data: related } = useSupabaseData<Project[]>(
     () =>
@@ -56,13 +61,11 @@ function ProjectDetail() {
     [project?.id],
   );
 
-  if (loading) {
+  if (seoLookupFailed) {
     return (
       <SiteLayout>
-        <div className="container-page section-y space-y-5">
-          <Skeleton className="h-8 w-2/3" />
-          <Skeleton className="h-72 w-full" />
-          <Skeleton className="h-4 w-full" />
+        <div className="container-page section-y">
+          <EmptyState title="Project details are temporarily unavailable" description="Please try again shortly or contact Zitso Energy for information about this project." action={<Button asChild><Link to="/contact">Contact Zitso Energy</Link></Button>} />
         </div>
       </SiteLayout>
     );
@@ -109,8 +112,20 @@ function ProjectDetail() {
   const gallery = asStringArray(project.gallery);
   const provided = asStringArray(project.services_provided);
 
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.seo_description || project.description || `Solar installation project by Zitso Energy${project.location ? ` in ${project.location}` : " in Nigeria"}.`,
+    url: `${SITE_ORIGIN}/projects/${encodeURIComponent(project.slug)}`,
+    ...(project.hero_image_url ? { image: new URL(project.hero_image_url, SITE_ORIGIN).toString() } : {}),
+    creator: { "@type": "Organization", name: "Zitso Energy", url: SITE_ORIGIN },
+    ...(project.completion_date || project.project_date ? { dateCreated: project.completion_date || project.project_date } : {}),
+  };
+
   return (
     <SiteLayout>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(projectSchema) }} />
       <section className="border-b border-border bg-secondary">
         <div className="container-page py-10">
           <Breadcrumbs

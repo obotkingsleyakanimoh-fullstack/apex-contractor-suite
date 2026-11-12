@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,21 +17,7 @@ import { cn } from "@/lib/utils";
 import type { Faq } from "@/types/db";
 
 export const Route = createFileRoute("/faq")({
-  head: () => ({
-    meta: [
-      { title: "Frequently Asked Questions" },
-      {
-        name: "description",
-        content:
-          "Answers to common questions about solar systems, inverter and battery storage, proposals, maintenance and project timelines.",
-      },
-      { property: "og:title", content: "Frequently Asked Questions" },
-      {
-        property: "og:description",
-        content: "Common questions about solar systems, proposals, maintenance, warranties and timelines.",
-      },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Solar Energy FAQs | Zitso Energy', description: 'Find answers about solar panel systems, inverter and battery sizing, installation, quotations, maintenance, warranties and project timelines.', path: '/faq' }),
   component: FaqPage,
 });
 

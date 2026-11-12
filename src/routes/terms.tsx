@@ -1,25 +1,11 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Breadcrumbs } from "@/components/site/shared";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Use | Zitso Energy" },
-      {
-        name: "description",
-        content:
-          "Terms governing use of the Zitso Energy website, enquiries, quotations and service arrangements.",
-      },
-      { property: "og:title", content: "Terms of Use | Zitso Energy" },
-      {
-        property: "og:description",
-        content: "Website, enquiry, quotation and service terms for Zitso Energy.",
-      },
-      { name: "robots", content: "index,follow" },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Terms of Use | Zitso Energy', description: 'Terms governing use of the Zitso Energy website, enquiries, quotations and service arrangements.', path: '/terms' }),
   component: TermsPage,
 });
 

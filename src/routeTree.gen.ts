@@ -18,6 +18,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RequestQuoteRouteImport } from './routes/request-quote'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
@@ -86,6 +87,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const RequestQuoteRoute = RequestQuoteRouteImport.update({
   id: '/request-quote',
   path: '/request-quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -219,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/locations': typeof LocationsRoute
   '/privacy': typeof PrivacyRoute
   '/request-quote': typeof RequestQuoteRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/locations': typeof LocationsRoute
   '/privacy': typeof PrivacyRoute
   '/request-quote': typeof RequestQuoteRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/locations': typeof LocationsRoute
   '/privacy': typeof PrivacyRoute
   '/request-quote': typeof RequestQuoteRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/privacy'
     | '/request-quote'
+    | '/sitemap.xml'
     | '/terms'
     | '/admin/activity'
     | '/admin/analytics'
@@ -360,6 +370,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/privacy'
     | '/request-quote'
+    | '/sitemap.xml'
     | '/terms'
     | '/admin/activity'
     | '/admin/analytics'
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/privacy'
     | '/request-quote'
+    | '/sitemap.xml'
     | '/terms'
     | '/admin/activity'
     | '/admin/analytics'
@@ -431,6 +443,7 @@ export interface RootRouteChildren {
   LocationsRoute: typeof LocationsRoute
   PrivacyRoute: typeof PrivacyRoute
   RequestQuoteRoute: typeof RequestQuoteRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
@@ -503,6 +516,13 @@ declare module '@tanstack/react-router' {
       path: '/request-quote'
       fullPath: '/request-quote'
       preLoaderRoute: typeof RequestQuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -728,6 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocationsRoute: LocationsRoute,
   PrivacyRoute: PrivacyRoute,
   RequestQuoteRoute: RequestQuoteRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,

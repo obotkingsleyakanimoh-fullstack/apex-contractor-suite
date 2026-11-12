@@ -1884,3 +1884,8 @@ The existing `/auth` page can show a **Continue with Google** button when `VITE_
 5. Set `VITE_ENABLE_GOOGLE_OAUTH=true` in the hosting provider and redeploy. Assign an existing staff role to each authorised Google-authenticated user through the normal admin role-management process.
 
 The supplied privacy and terms pages are a practical starting point and must be checked against the final deployed services, company contact details, retention practices and legal advice before production launch.
+
+
+## Google Search and SEO setup
+
+Technical SEO, the XML sitemap endpoint, robots directives, canonical metadata, structured data and Search Console submission instructions are documented in [`ZITSO_GOOGLE_SEARCH_CONSOLE_SETUP.md`](./ZITSO_GOOGLE_SEARCH_CONSOLE_SETUP.md). After deployment, submit `https://zitsoenergy.com/sitemap.xml` in Google Search Console. Dynamic sitemap entries require the matching Supabase runtime variables described in that guide.

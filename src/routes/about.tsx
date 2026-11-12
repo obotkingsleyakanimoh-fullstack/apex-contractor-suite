@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, ShieldCheck, Sun, Wrench, Zap } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -8,10 +9,7 @@ import { PageHeroCarousel } from "@/components/site/PageHeroCarousel";
 import type { HeroContent, PageContent } from "@/types/db";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [
-    { title: "About Zitso Energy | Solar Energy Company" },
-    { name: "description", content: "Learn about Zitso Energy and our approach to reliable solar power, battery storage and inverter systems." },
-  ]}),
+  head: () => createPageHead({ title: 'About Zitso Energy | Solar Energy Solutions in Nigeria', description: 'Learn about Zitso Energy, our approach to solar power system design, hybrid inverter installation, battery storage and ongoing maintenance.', path: '/about' }),
   component: AboutPage,
 });
 

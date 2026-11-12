@@ -70,7 +70,7 @@ function AdminMedia() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">Media library</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Upload reusable WebP, AVIF, JPEG, PNG or GIF images for services, projects and social sharing.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Upload images for services, projects and social sharing. JPEG, PNG and AVIF files are automatically resized and converted to WebP; animated GIFs are preserved.</p>
         </div>
         <div>
           <input ref={input} type="file" accept={ALLOWED_IMAGE_TYPES.join(",")} className="sr-only" onChange={(e) => { void upload(e.target.files?.[0]); e.currentTarget.value = ""; }} />

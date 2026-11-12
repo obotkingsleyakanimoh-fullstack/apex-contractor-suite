@@ -21,7 +21,7 @@ export function PageHeroCarousel({
   secondaryHref = "/services",
   primaryLabel = "Get a solar assessment",
   secondaryLabel = "Explore solar solutions",
-  minHeight = "min-h-[620px] sm:min-h-[720px] lg:min-h-[820px]",
+  minHeight = "min-h-[580px] sm:min-h-[650px] lg:min-h-[760px]",
 }: Props) {
   const slides = useMemo(() => {
     const configured = Array.isArray(hero.slides) ? hero.slides.filter((s) => s?.image_url) : [];
@@ -49,7 +49,7 @@ export function PageHeroCarousel({
 
   return (
     <section
-      className={`relative overflow-hidden bg-[var(--hero-overlay)] text-white ${minHeight}`}
+      className={`site-hero relative overflow-hidden bg-[var(--hero-overlay)] text-white ${minHeight}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={(event) => setDragStart(event.touches[0].clientX)}
@@ -66,7 +66,16 @@ export function PageHeroCarousel({
           className={`absolute inset-0 transition-all duration-[1400ms] ease-out ${index === active ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-[1.035]"}`}
           aria-hidden={index !== active}
         >
-          <img src={item.image_url} alt="" className="h-full w-full object-cover object-[center_35%] sm:object-center" />
+          {(index === active || index === (active + 1) % slides.length) ? (
+            <img
+              src={item.image_url}
+              alt=""
+              loading={index === active ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={index === active ? "high" : "low"}
+              className="h-full w-full object-cover object-[center_35%] sm:object-center"
+            />
+          ) : null}
           <div
             className="absolute inset-0"
             style={{
@@ -82,12 +91,12 @@ export function PageHeroCarousel({
         </div>
       ))}
 
-      <div className={`container-page relative flex ${minHeight} items-end py-14 sm:py-20 sm:py-24 lg:items-center`}>
+      <div className={`container-page relative flex ${minHeight} items-end py-14 sm:py-20 lg:items-center`}>
         <div key={active} className="w-full max-w-5xl animate-in fade-in slide-in-from-bottom-5 duration-700">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-sm">
             {slide.eyebrow || hero.eyebrow || "Solar energy • Zitso Energy"}
           </p>
-          <h1 className="mt-4 max-w-5xl break-words font-display text-[2.7rem] font-bold leading-[0.98] tracking-[-0.04em] sm:mt-5 sm:text-6xl lg:text-[6.2rem]">
+          <h1 className="mt-4 max-w-5xl break-words font-display text-[2.55rem] font-bold leading-[1.02] tracking-[-0.045em] sm:mt-5 sm:text-6xl lg:text-[5.6rem]">
             {slide.headline || hero.headline || "Power your home with energy you can depend on."}
           </h1>
           <p className="mt-5 max-w-2xl text-[0.98rem] leading-6 text-white/80 sm:mt-7 sm:text-xl sm:leading-8">

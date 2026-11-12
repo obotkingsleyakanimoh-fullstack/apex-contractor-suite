@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { useSiteData } from "@/hooks/useSiteData";
@@ -11,10 +12,10 @@ import { mailtoHref, telHref, whatsappHref } from "@/lib/format";
 import { directionsUrl, mapEmbedUrl } from "@/lib/geo";
 import type { HeroContent } from "@/types/db";
 
-export const Route = createFileRoute("/contact")({ head: () => ({ meta: [
-  { title: "Contact Zitso Energy — Solar Support & Enquiries" },
-  { name: "description", content: "Speak with Zitso Energy about solar installation, inverter systems, battery storage, maintenance or an existing solar system." },
-]}), component: ContactPage });
+export const Route = createFileRoute("/contact")({
+  head: () => createPageHead({ title: 'Contact Zitso Energy | Solar Installation Enquiries', description: 'Contact Zitso Energy to discuss solar panel installation, inverter systems, battery storage, maintenance or a solar assessment for your home or business.', path: '/contact' }),
+  component: ContactPage,
+});
 
 const FALLBACK_HERO: HeroContent["slides"] = [
   { image_url: "/images/solar-installation.webp", eyebrow: "Talk to Zitso Energy", headline: "Let's plan the right solar system for your needs.", subheadline: "Tell us what you want to power, where you are located and what kind of backup you need." },

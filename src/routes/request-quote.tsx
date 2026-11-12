@@ -1,3 +1,4 @@
+import { createPageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { BatteryCharging, CheckCircle2, Clock, ShieldCheck, Sun, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,16 +40,7 @@ const FALLBACK_HERO: HeroContent["slides"] = [
 export const Route = createFileRoute("/request-quote")({
   validateSearch: (search: Record<string, unknown>): { service?: string } =>
     typeof search.service === "string" ? { service: search.service } : {},
-  head: () => ({
-    meta: [
-      { title: "Request a Quote | Zitso Energy" },
-      {
-        name: "description",
-        content:
-          "Tell Zitso Energy what you need to power and request a solar, inverter or battery system assessment.",
-      },
-    ],
-  }),
+  head: () => createPageHead({ title: 'Request a Solar Quote | Zitso Energy Nigeria', description: 'Request a solar power, hybrid inverter or battery storage assessment. Tell Zitso Energy what you need to power and receive a tailored project quotation.', path: '/request-quote' }),
   component: RequestQuotePage,
 });
 

@@ -20,8 +20,8 @@ export function Navbar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <header className="site-navbar sticky top-0 z-50 w-full border-b border-black/5 bg-white/95 backdrop-blur-xl">
-      <div className="container-page flex h-[74px] items-center justify-between gap-4">
+    <header className="site-navbar sticky top-0 z-50 w-full border-b border-black/5 bg-white/95 shadow-[0_8px_28px_-24px_rgba(18,49,39,0.55)] backdrop-blur-xl">
+      <div className="container-page flex h-[78px] items-center justify-between gap-4">
         <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setOpen(false)}>
           {company?.logo_url ? (
             <img src={company.logo_url} alt={company.company_name} className="h-10 w-auto max-w-[10rem] object-contain" width={160} height={40} />
@@ -39,9 +39,9 @@ export function Navbar() {
               key={item.url}
               to={item.url}
               className={cn(
-                "rounded-full px-4 py-2.5 text-sm font-semibold transition-colors",
+                "rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200",
                 pathname === item.url || pathname.startsWith(`${item.url}/`)
-                  ? "bg-secondary text-[var(--color-primary)]"
+                  ? "bg-secondary text-[var(--color-primary)] shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-[var(--heading-color)]",
               )}
             >
