@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Activity,
+  BarChart3,
   Building2,
   BookOpen,
   FileQuestion,
@@ -48,6 +49,7 @@ const NAV: { to: string; label: string; icon: any; exact?: boolean }[] = [
   { to: "/admin/faqs", label: "FAQs", icon: FileQuestion },
   { to: "/admin/areas", label: "Service areas", icon: MapPin },
   { to: "/admin/quotes", label: "Quote requests", icon: Quote },
+  { to: "/admin/analytics", label: "Visitor & conversions", icon: BarChart3 },
   { to: "/admin/messages", label: "Contact messages", icon: Mail },
   { to: "/admin/content", label: "Business & content", icon: Building2 },
   { to: "/admin/navigation", label: "Navigation & footer", icon: Menu },

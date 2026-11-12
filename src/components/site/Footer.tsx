@@ -3,6 +3,7 @@ import { Clock, Facebook, Globe, Instagram, Linkedin, Mail, MapPin, Phone, Twitt
 import { useSiteData } from "@/hooks/useSiteData";
 import { mailtoHref, telHref } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { openAnalyticsPreferences } from "@/lib/analytics";
 
 const SOCIAL_ICONS: Record<string, typeof Facebook> = {
   facebook: Facebook,
@@ -100,6 +101,7 @@ export function Footer() {
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             <Link to="/privacy" className="hover:text-white">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-white">Terms</Link>
+            <button type="button" onClick={openAnalyticsPreferences} className="hover:text-white">Cookie / Analytics settings</button>
           </div>
         </div>
       </div>

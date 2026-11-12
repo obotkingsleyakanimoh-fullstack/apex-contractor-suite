@@ -31,6 +31,22 @@ function AuthPage() {
     if (!loading && user) void navigate({ to: "/admin", replace: true });
   }, [user, loading, navigate]);
 
+  const googleOAuthEnabled = import.meta.env.VITE_ENABLE_GOOGLE_OAUTH === "true";
+
+  async function onGoogleSignIn() {
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/auth` },
+      });
+      if (error) throw error;
+    } catch (error) {
+      setBusy(false);
+      toast.error(`Google sign-in could not start: ${error instanceof Error ? error.message : "Please try again."}`);
+    }
+  }
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -81,6 +97,19 @@ function AuthPage() {
             {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Sign in
           </Button>
+          {googleOAuthEnabled ? (
+            <>
+              <div className="flex items-center gap-3 py-1 text-xs text-muted-foreground">
+                <span className="h-px flex-1 bg-border" />
+                <span>OR</span>
+                <span className="h-px flex-1 bg-border" />
+              </div>
+              <Button type="button" variant="outline" className="w-full" disabled={busy} onClick={onGoogleSignIn}>
+                {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Continue with Google
+              </Button>
+            </>
+          ) : null}
         </form>
       </div>
     </div>

@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 const schema = z.object({
   customer_name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -64,6 +65,7 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [formStarted, setFormStarted] = useState(false);
 
   function addFiles(list: FileList | null) {
     if (!list) return;
@@ -146,7 +148,9 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
         }
       }
 
+      void trackAnalyticsEvent("quote_form_submit");
       setDone(true);
+      setFormStarted(false);
       toast.success("Enquiry received. We will be in touch shortly.");
     } catch {
       toast.error("We could not submit your request. Please try again or call us.");
@@ -172,7 +176,17 @@ export function QuoteForm({ defaultServiceId }: { defaultServiceId?: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="surface-panel space-y-6 p-5 sm:p-7" noValidate>
+    <form
+      onSubmit={onSubmit}
+      onFocusCapture={() => {
+        if (!formStarted) {
+          setFormStarted(true);
+          void trackAnalyticsEvent("quote_form_start");
+        }
+      }}
+      className="surface-panel space-y-6 p-5 sm:p-7"
+      noValidate
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Full name" name="customer_name" error={errors.customer_name} required>
           <Input id="customer_name" name="customer_name" placeholder="e.g. Adaeze Okonkwo" />

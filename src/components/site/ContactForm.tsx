@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -20,6 +21,7 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [formStarted, setFormStarted] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,7 +56,9 @@ export function ContactForm() {
       toast.error("Your message could not be sent. Please try again or call us.");
       return;
     }
+    void trackAnalyticsEvent("contact_form_submit");
     setSent(true);
+    setFormStarted(false);
     toast.success("Message sent. We will respond shortly.");
   }
 
@@ -74,7 +78,17 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="surface-panel space-y-5 p-5 sm:p-7" noValidate>
+    <form
+      onSubmit={onSubmit}
+      onFocusCapture={() => {
+        if (!formStarted) {
+          setFormStarted(true);
+          void trackAnalyticsEvent("contact_form_start");
+        }
+      }}
+      className="surface-panel space-y-5 p-5 sm:p-7"
+      noValidate
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="name" className="text-sm font-semibold">

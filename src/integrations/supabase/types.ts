@@ -1039,6 +1039,48 @@ export type Database = {
         }
         Relationships: []
       }
+      website_analytics_events: {
+        Row: {
+          campaign: string | null
+          created_at: string
+          event_name: string
+          id: number
+          page_path: string
+          page_title: string | null
+          referrer_origin: string | null
+          session_id: string
+          target_label: string | null
+          traffic_source: string
+          visitor_id: string
+        }
+        Insert: {
+          campaign?: string | null
+          created_at?: string
+          event_name: string
+          id?: number
+          page_path: string
+          page_title?: string | null
+          referrer_origin?: string | null
+          session_id: string
+          target_label?: string | null
+          traffic_source?: string
+          visitor_id: string
+        }
+        Update: {
+          campaign?: string | null
+          created_at?: string
+          event_name?: string
+          id?: number
+          page_path?: string
+          page_title?: string | null
+          referrer_origin?: string | null
+          session_id?: string
+          target_label?: string | null
+          traffic_source?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1053,6 +1095,7 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      get_website_analytics_summary: { Args: { p_days?: number }; Returns: Json }
       set_user_role: {
         Args: {
           new_role: Database["public"]["Enums"]["app_role"] | null

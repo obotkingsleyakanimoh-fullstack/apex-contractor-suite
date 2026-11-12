@@ -1864,3 +1864,23 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Website analytics and lead conversion reporting
+
+The admin area now includes **Admin → Visitor & conversions**. The tracker is first-party and opt-in: it records page views, anonymous visitor/session identifiers, traffic-source tags, contact/quote form starts and submissions, and WhatsApp, phone and email link clicks only after a visitor accepts optional analytics. The dashboard reports both total clicks and distinct sessions for key contact actions, making repeat taps easier to distinguish from separate interested visits. It does not put names, email addresses, phone numbers, form contents, uploaded files or IP addresses into analytics events. Visitors can reject analytics or change their choice from the public-site footer.
+
+Apply `drizzle/migrations/0007_website_conversion_analytics.sql` to the connected Supabase database before using the dashboard. The SQL creates the analytics table, indexes, Row Level Security policies and staff-only summary function. Do not expose the `service_role` key in the browser.
+
+**Important reporting distinction:** a click on WhatsApp or a telephone number is a lead-intent signal, not proof of a conversation, purchase or payment. Actual contact messages and quote requests are counted from their database records. Confirm completed jobs and money received with the business owner and reconcile those separately before calculating any revenue split. Analytics is an operational reporting tool, not an audited sales ledger or bot-proof measurement system.
+
+## Google OAuth sign-in (optional staff sign-in)
+
+The existing `/auth` page can show a **Continue with Google** button when `VITE_ENABLE_GOOGLE_OAUTH=true` is set in the deployment environment. Google sign-in is still gated by Supabase provider configuration and staff-role authorization; signing in with a Google account does not by itself grant admin access.
+
+1. In Supabase Dashboard → Authentication → Providers, enable Google and enter the Google OAuth Client ID and Client Secret.
+2. In Google Cloud Console, create a Web application OAuth client. Add the Supabase callback URL shown in Supabase (normally `https://<your-supabase-project-ref>.supabase.co/auth/v1/callback`) as an authorised redirect URI.
+3. In Supabase Authentication → URL Configuration, set the production Site URL to `https://zitsoenergy.com` and allow `https://zitsoenergy.com/auth` as a redirect URL. Add the `www` version only if the website actually serves it.
+4. In Google OAuth branding, set the application home page to `https://zitsoenergy.com`, the privacy policy to `https://zitsoenergy.com/privacy`, and the terms URL to `https://zitsoenergy.com/terms`. Verify ownership of `zitsoenergy.com` in Google Search Console and ensure the home page, privacy policy and terms are public over HTTPS.
+5. Set `VITE_ENABLE_GOOGLE_OAUTH=true` in the hosting provider and redeploy. Assign an existing staff role to each authorised Google-authenticated user through the normal admin role-management process.
+
+The supplied privacy and terms pages are a practical starting point and must be checked against the final deployed services, company contact details, retention practices and legal advice before production launch.

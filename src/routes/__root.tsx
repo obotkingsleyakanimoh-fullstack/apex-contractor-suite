@@ -15,6 +15,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { SiteDataProvider } from "@/hooks/useSiteData";
 import { AppearanceProvider } from "@/hooks/useAppearance";
 import { Toaster } from "@/components/ui/sonner";
+import { WebsiteAnalytics } from "@/components/site/WebsiteAnalytics";
 
 function NotFoundComponent() {
   return (
@@ -126,6 +127,7 @@ function RootComponent() {
           <AppearanceProvider>
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
+            <WebsiteAnalytics />
             <Toaster position="top-right" richColors closeButton />
           </AppearanceProvider>
         </SiteDataProvider>
