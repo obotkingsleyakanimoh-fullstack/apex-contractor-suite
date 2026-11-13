@@ -1889,3 +1889,14 @@ The supplied privacy and terms pages are a practical starting point and must be 
 ## Google Search and SEO setup
 
 Technical SEO, the XML sitemap endpoint, robots directives, canonical metadata, structured data and Search Console submission instructions are documented in [`ZITSO_GOOGLE_SEARCH_CONSOLE_SETUP.md`](./ZITSO_GOOGLE_SEARCH_CONSOLE_SETUP.md). After deployment, submit `https://zitsoenergy.com/sitemap.xml` in Google Search Console. Dynamic sitemap entries require the matching Supabase runtime variables described in that guide.
+
+## Additional Super Admin access
+
+The latest update includes a verified-email, one-time Super Admin bootstrap for the approved mailbox `zitsoglobal@gmail.com`.
+
+1. Apply `drizzle/migrations/0008_bootstrap_zitso_global_super_admin.sql` to the production Supabase project.
+2. Invite or create that mailbox under Supabase **Authentication → Users**.
+3. After the email is verified, the database grants the existing `super_admin` role automatically.
+4. Sign in at `/auth` and verify the role under **Admin → Admin users & roles**.
+
+No password is stored in this repository. See `ZITSO_SUPER_ADMIN_SETUP.md` for the complete procedure and safe credential handling guidance.

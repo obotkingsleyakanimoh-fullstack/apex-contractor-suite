@@ -51,7 +51,7 @@ function AdminUsers() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">Admin users & roles</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Review registered accounts and control staff permissions. New accounts can register through the normal sign-in page, then an administrator can assign a role here.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Review registered accounts and control staff permissions. Create or invite accounts in Supabase Authentication first; verified users appear here and can then be assigned an appropriate role.</p>
       </div>
       {!isAdmin ? (
         <div className="surface-panel p-5 text-sm text-muted-foreground">Only administrators can change roles.</div>
